@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="public/css/b5.css">
+    <link rel="stylesheet" href="public/css/main.css">
+    <title>Buscador de Palabras</title>
+</head>
+
+<body>
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-md-11 text-center mb-4">
+                <h1 class="fw-bold">Buscador de Palabras - Actividad</h1>
+                <hr>
+            </div>
+
+            <div class="col-lg-9 col-md-11 mb-3">
+                <div id="contenedor-alertas"></div>
+            </div>
+
+            <div class="col-lg-9 col-md-11">
+                <div class="card p-4 mb-4">
+                    <form id="form-buscador">
+                        <!-- Este es un espacio donde se realizara la captura del textoo -->
+                        <div class="mb-3">
+                            <label for="texto-captura" class="form-label fw-semibold">Texto a procesar:</label>
+                            <textarea id="texto-captura" class="form-control" rows="6" placeholder="Pega o escribe aquí el texto que deseas analizar..."></textarea>
+                        </div>
+
+                        <!-- Seccion que nos brinda una barra para ingresar la palabra que se va a filtrar -->
+                        <div class="mb-3">
+                            <label for="palabra-busqueda" class="form-label fw-semibold">Palabra a buscar:</label>
+                            <input id="palabra-busqueda" class="form-control" type="text" placeholder="Ejemplo: desarrollo">
+                        </div>
+
+                        <!-- Botones de accion para buscar la palabras a buscar, ademas de limpiar el texto ingresado -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" id="btn-buscar" class="btn btn-primary px-4">Buscar</button>
+                            <button type="button" id="btn-limpiar" class="btn btn-danger px-4">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Hace que se despliegue una nueva seccion en donde se mostrara los resultados, se muestra el conteo de palabras -->
+            <div class="col-lg-9 col-md-11 d-none" id="contenedor-resultado">
+                <div class="card p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0 fw-bold">Texto Procesado</h4>
+                        <span class="badge bg-primary badge-contador">
+                            Coincidencias: <strong id="numero-coincidencias">0</strong>
+                        </span>
+                    </div>
+                    <hr>
+                    <!-- Lo que hace es que las palabras que sean encontradas segun el filtro sean resaltadas con un contorno  -->
+                    <div id="texto-procesado"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="public/js/b5.js"></script>
+    <script src="public/js/index.js"></script>
+</body>
+
+</html>
