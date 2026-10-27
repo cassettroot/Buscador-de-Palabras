@@ -34,9 +34,16 @@
                             <input id="palabra-busqueda" class="form-control" type="text" placeholder="Ejemplo: desarrollo">
                         </div>
 
-                        <!-- Botones de acción para buscar y limpiar -->
+                        <!-- Barra para ingresar la palabra de reemplazo -->
+                        <div class="mb-3">
+                            <label for="palabra-reemplazo" class="form-label fw-semibold">Palabra de reemplazo:</label>
+                            <input id="palabra-reemplazo" class="form-control" type="text" placeholder="Ejemplo: innovación">
+                        </div>
+
+                        <!-- Botones de acción para buscar, reemplazar y limpiar -->
                         <div class="d-flex gap-2">
                             <button type="submit" id="btn-buscar" class="btn btn-primary px-4">Buscar</button>
+                            <button type="button" id="btn-reemplazar" class="btn btn-success px-4">Reemplazar</button>
                             <button type="button" id="btn-limpiar" class="btn btn-danger px-4">Limpiar</button>
                         </div>
                     </form>

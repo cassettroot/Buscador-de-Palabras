@@ -4,12 +4,17 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         buscarPalabra();
     });
+    document.getElementById('btn-reemplazar')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        reemplazarPalabra();
+    });
     document.getElementById('btn-limpiar')?.addEventListener('click', limpiarPantalla);
     document.getElementById('form-buscador')?.addEventListener('submit', (e) => {
         e.preventDefault();
         buscarPalabra();
     });
 });
+
 
 // Función principal para buscar y contar palabras
 function buscarPalabra() {
@@ -29,12 +34,21 @@ function buscarPalabra() {
         return;
     }
 
-    // ignora las expresiones regulares
+    // ignora los caracteres especiales para usar en la expresión regular
     const palabraEscapada = escaparRegExp(palabraInput.trim());
+
+    // Expresión regular insensible a mayúsculas/minúsculas
+    const regex = new RegExp(`(${palabraEscapada})`, 'gi');
 
     // contador de coincidencias en el texto
     const coincidencias = textoInput.match(regex);
     const totalCoincidencias = coincidencias ? coincidencias.length : 0;
+
+    // Escapar texto base para evitar inyecciones HTML y resaltar coincidencias
+    const textoSeguro = escaparHTML(textoInput);
+    const palabraSegura = escaparRegExp(escaparHTML(palabraInput.trim()));
+    const regexSeguro = new RegExp(`(${palabraSegura})`, 'gi');
+    const textoResaltado = textoSeguro.replace(regexSeguro, '<mark class="resaltado">$1</mark>');
 
     // Mostrar u ocultar sección de resultados
     const contenedorResultado = document.getElementById('contenedor-resultado');
@@ -48,7 +62,6 @@ function buscarPalabra() {
         contenedorResultado.classList.remove('d-none');
     }
 
-
     // Alertas según la palabra filtrada
     if (totalCoincidencias === 0) {
         mostrarAlerta(`No se encontraron coincidencias para la palabra: "${palabraInput.trim()}".`, 'secondary');
@@ -58,6 +71,62 @@ function buscarPalabra() {
             : `Se encontraron ${totalCoincidencias} coincidencias.`;
         mostrarAlerta(mensaje, 'success');
     }
+}
+
+// funcion que remplaza la palabra filtrada por una nueva
+function reemplazarPalabra() {
+    const textoElemento = document.getElementById('texto-captura');
+    const textoInput = textoElemento?.value || '';
+    const palabraInput = document.getElementById('palabra-busqueda')?.value || '';
+    const reemplazoInput = document.getElementById('palabra-reemplazo')?.value || '';
+
+    limpiarAlertas();
+
+    // Alerta de campos obligatorios
+    if (!textoInput.trim()) {
+        mostrarAlerta('para continuar ingresa la palabra a buscar', 'warning');
+        return;
+    }
+
+    if (!palabraInput.trim()) {
+        mostrarAlerta('ingresa la palabras que quieres buscar', 'warning');
+        return;
+    }
+
+    if (!reemplazoInput.trim()) {
+        mostrarAlerta('ingresa la palabra que decees buscar', 'warning');
+        return;
+    }
+
+    // ignora los caracteres especiales para usar en la expresión regular
+    const palabraEscapada = escaparRegExp(palabraInput.trim());
+    const regex = new RegExp(palabraEscapada, 'gi');
+
+    // contador de coincidencias en el texto
+    const coincidencias = textoInput.match(regex);
+    const totalCoincidencias = coincidencias ? coincidencias.length : 0;
+
+    if (totalCoincidencias === 0) {
+        mostrarAlerta(`No se encontraron coincidencias para la palabra: "${palabraInput.trim()}".`, 'secondary');
+        return;
+    }
+
+    // reemplazar todas las coincidencias en el texto
+    const nuevoTexto = textoInput.replace(regex, reemplazoInput.trim());
+    if (textoElemento) {
+        textoElemento.value = nuevoTexto;
+    }
+
+    // ocultar los resultados previos
+    const contenedorResultado = document.getElementById('contenedor-resultado');
+    if (contenedorResultado) {
+        contenedorResultado.classList.add('d-none');
+    }
+
+    const mensaje = totalCoincidencias === 1
+        ? 'Se reemplazó 1 coincidencia.'
+        : `Se reemplazaron ${totalCoincidencias} coincidencias.`;
+    mostrarAlerta(mensaje, 'success');
 }
 
 // Limpia el formulario 
@@ -91,7 +160,7 @@ function mostrarAlerta(mensaje, tipo = 'primary') {
     `;
 }
 
-// Limpia las alertas activas 
+// Limpia las alertas activas
 
 function limpiarAlertas() {
     const contenedor = document.getElementById('contenedor-alertas');
@@ -99,6 +168,7 @@ function limpiarAlertas() {
 }
 
 // Ignora los caracteres especiales de las expresiones regulares
+
 function escaparRegExp(cadena) {
     return cadena.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
